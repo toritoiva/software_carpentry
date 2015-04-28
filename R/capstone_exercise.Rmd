@@ -1,0 +1,50 @@
+---
+title: "Final Capstone Exercise"
+author: "catoro"
+date: "Tuesday, April 28, 2015"
+output: html_document
+---
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(fig.path="Figs/", message=FALSE, warning=FALSE,
+                      echo=FALSE, results="hide", fig.width=11)
+```
+
+```{r, load_library, echo=FALSE, results="hide", message=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+
+```{r,load_data,echo=FALSE}
+gapminder <- read.csv("C:/Users/Clau/Desktop/scws/data/gapminder.csv")
+```
+
+```{r filter_data,echo=FALSE}
+group <- gapminder %>%
+   filter(country %in% c("Chile","Ireland","Argentina"))
+```
+The selected group of countries for this exercise was . The GDP variation over the years is presented below:
+
+```{r, plotting, echo=FALSE}
+  ggplot(group,aes(x=year, y=gdpPercap)) + 
+  geom_point()+
+  scale_x_log10()+
+  facet_grid(~country)+
+  theme_bw()
+```
+
+```{r,ave_gdp_country, echo=FALSE}
+ave_gdp_chile <- gapminder %>%
+  filter(country=="Chile") %>%
+  summarize(ave=mean(gdpPercap))
+
+ave_gdp_ireland <- gapminder %>%
+  filter(country=="Ireland") %>%
+  summarize(ave=mean(gdpPercap))
+
+ave_gdp_argentina <- gapminder %>%
+  filter(country=="Argentina") %>%
+  summarize(ave=mean(gdpPercap))
+```
+Chile and Argentina show a similar evolution, while Ireland has increased significantly in the last years.The average GDP for Chile  is `r round(ave_gdp_chile,1)`, for Ireland is `r round(ave_gdp_ireland,1)` and for Argentina is `r round(ave_gdp_argentina,1)`.
+
+

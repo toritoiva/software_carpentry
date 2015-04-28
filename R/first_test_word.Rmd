@@ -1,0 +1,56 @@
+---
+title: "Untitled"
+author: "catoro"
+date: "Tuesday, April 28, 2015"
+output: word_document
+---
+
+```{r, load_library, echo=FALSE, results="hide", message=FALSE}
+library(dplyr)
+library(ggplot2)
+```
+Here are the first few lines of data
+```{r,load_data,echo=FALSE}
+gapminder <- read.csv("C:/Users/Clau/Desktop/scws/data/gapminder.csv")
+```
+
+```{r,head_gapminder,echo=FALSE}
+head(gapminder)
+````
+All data
+
+```{r,echo=FALSE}
+ggplot(gapminder,
+       aes(x=gdpPercap,y=lifeExp))+
+        geom_point()
+```
+
+This gapminder data has `r nrow(gapminder)` and `r ncol(gapminder)` columns
+
+A summary of the GDP growth for Chile
+
+```{r,echo=FALSE}
+plot_country <- 
+  function(country, data=gapminder)
+  {
+    library(dplyr)
+    library(ggplot2)
+   
+    the_country <- country
+    
+      data %>%
+      filter(country==the_country) %>%
+      ggplot(aes(y=lifeExp,x=gdpPercap))+
+      geom_point()+
+      scale_x_log10()+
+      facet_grid(~year)
+  }
+plot_country("Chile")
+```
+
+```{r ave_life_exp_for_chile, include=FALSE}
+ale_chile <- gapminder %>%
+  filter(country=="Chile") %>%
+  summarize(ave=mean(lifeExp))
+```
+I get that the avg life for Chile is `r ale_chile` or `r round(ale_chile,1)`
